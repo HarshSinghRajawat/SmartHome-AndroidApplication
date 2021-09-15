@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background"
+    tools:context=".ui.HomeFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:letterSpacing=".1"
+            android:text="Home Server"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:clickable="true"
+            android:layout_marginBottom="30dp"
+            android:src="@drawable/ic_baseline_settings_remote"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="parent"
+            android:focusable="true" />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="30dp"
+            android:clickable="true"
+            android:src="@drawable/ic_baseline_ac_unit"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_end"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".20" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_list_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".05" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_list_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".95" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_list_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_list_start"
+            app:layout_constraintTop_toTopOf="@+id/guideline_end" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
