@@ -1,5 +1,6 @@
 package com.one.homeserverjava.ui;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.one.homeserverjava.AsyncResponse;
+import com.one.homeserverjava.R;
 import com.one.homeserverjava.databinding.FragmentHomeBinding;
+import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.ui.viewModel.HomeViewModel;
 
 
@@ -27,6 +31,42 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         views = FragmentHomeBinding.inflate(getLayoutInflater(),container,false);
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        getLocalIP();
+        //checkPiConnectivity();
+        //initListeners();
         return views.getRoot();
     }
+
+    public void initListeners(){
+        viewModel.getApiLiveData().observe(getViewLifecycleOwner(),this::handleApiResponse);
+    }
+
+    public void getLocalIP(){
+        if(viewModel.checkLocalPiAddress()){
+            return;
+        }else{
+            //new DialogBox(true,getContext(),getActivity()).show();
+            new DialogBox().show(getFragmentManager(),null);
+
+        }
+    }
+
+    public void checkPiConnectivity(){
+        viewModel.sendRequest(viewModel.CHECK, null,null);
+    }
+
+    private void handleApiResponse(AsyncResponse<ServerResponse, Exception> response) {
+
+        switch (response.status){
+            case AsyncResponse.STATUS_NOT_STARTED:
+                break;
+            case AsyncResponse.STATUS_STARTED:
+                break;
+            case AsyncResponse.STATUS_SUCCESS:
+                break;
+        }
+
+    }
+
+
 }

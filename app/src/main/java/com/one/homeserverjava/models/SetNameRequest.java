@@ -1,13 +1,11 @@
 package com.one.homeserverjava.models;
 
-public class RelayRequest {
-    //'{ "Relay":"$relay" , "status":"$set" }'
+public class SetNameRequest {//'{ "Relay":"$relay" , "Name":"$name" }'
     String relay;
-    String status;
-
-    public RelayRequest(String relay, String status) {
+    String relayName;
+    public SetNameRequest(String relay, String relayName) {
         this.relay = relay;
-        this.status = status;
+        this.relayName = relayName;
     }
 
     public String getRelay() {
@@ -19,10 +17,10 @@ public class RelayRequest {
     }
 
     public String getStatus() {
-        return status;
+        return relayName;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.relayName = status;
     }
 }

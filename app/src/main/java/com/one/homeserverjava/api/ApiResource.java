@@ -2,7 +2,7 @@ package com.one.homeserverjava.api;
 
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
-import com.one.homeserverjava.models.setNameRequest;
+import com.one.homeserverjava.models.SetNameRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,7 +17,7 @@ public interface ApiResource {
     Call<ServerResponse> getData();
 
     @POST("/setname")
-    Call<ServerResponse> setName(@Body setNameRequest body);
+    Call<ServerResponse> setName(@Body SetNameRequest body);
 
     @GET("/temp&&check=2sa69y23dgf")
     Call<ServerResponse> getTemp();

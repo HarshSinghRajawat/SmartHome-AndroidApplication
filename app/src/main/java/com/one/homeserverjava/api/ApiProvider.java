@@ -20,7 +20,7 @@ public class ApiProvider {
 
     public static ApiProvider getInstance(Application app){
         synchronized (ApiProvider.class){
-            if (INSTANCE == null) {
+            if (INSTANCE == null && PrefProvider.INSTANCE!=null) {
                 INSTANCE = new ApiProvider(app);
             }
         }
@@ -30,8 +30,6 @@ public class ApiProvider {
 
 
     private ApiProvider(Application application) {
-
-
 
         client = new OkHttpClient.Builder()
                 .writeTimeout(60, TimeUnit.SECONDS)
