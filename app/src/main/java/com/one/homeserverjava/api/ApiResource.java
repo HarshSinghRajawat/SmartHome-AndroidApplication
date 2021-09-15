@@ -1,4 +1,4 @@
-package com.one.homeserverjava.provider;
+package com.one.homeserverjava.api;
 
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;

@@ -1,4 +1,4 @@
-package com.one.homeserverjava.provider;
+package com.one.homeserverjava.api;
 
 import android.app.Application;
 
@@ -7,7 +7,6 @@ import com.squareup.moshi.Moshi;
 
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
