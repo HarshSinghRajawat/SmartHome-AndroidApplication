@@ -1,4 +1,4 @@
-package com.one.homeserverjava;
+package com.one.homeserverjava.utils;
 
 public class AsyncResponse<T,E> {
     public static final int STATUS_NOT_STARTED = 0;

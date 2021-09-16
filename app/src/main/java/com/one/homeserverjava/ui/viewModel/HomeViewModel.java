@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.one.homeserverjava.AsyncResponse;
+import com.one.homeserverjava.utils.AsyncResponse;
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;

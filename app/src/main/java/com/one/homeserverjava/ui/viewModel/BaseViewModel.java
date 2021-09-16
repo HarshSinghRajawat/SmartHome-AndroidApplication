@@ -5,7 +5,7 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 
-import com.one.homeserverjava.Repository;
+import com.one.homeserverjava.utils.Repository;
 
 public class BaseViewModel extends AndroidViewModel {
 

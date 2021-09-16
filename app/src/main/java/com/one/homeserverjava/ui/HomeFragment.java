@@ -1,6 +1,5 @@
 package com.one.homeserverjava.ui;
 
-import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.one.homeserverjava.AsyncResponse;
-import com.one.homeserverjava.R;
+import com.one.homeserverjava.utils.AsyncResponse;
 import com.one.homeserverjava.databinding.FragmentHomeBinding;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.ui.viewModel.HomeViewModel;
+import com.one.homeserverjava.utils.Utils;
 
 
 public class HomeFragment extends Fragment {
@@ -32,8 +31,8 @@ public class HomeFragment extends Fragment {
         views = FragmentHomeBinding.inflate(getLayoutInflater(),container,false);
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         getLocalIP();
-        //checkPiConnectivity();
-        //initListeners();
+        checkPiConnectivity();
+        initListeners();
         return views.getRoot();
     }
 
@@ -45,8 +44,7 @@ public class HomeFragment extends Fragment {
         if(viewModel.checkLocalPiAddress()){
             return;
         }else{
-            //new DialogBox(true,getContext(),getActivity()).show();
-            new DialogBox().show(getFragmentManager(),null);
+            Utils.notifyDialogBox(getFragmentManager(),Utils.GET_IP);
 
         }
     }

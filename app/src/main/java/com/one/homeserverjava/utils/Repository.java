@@ -1,4 +1,4 @@
-package com.one.homeserverjava;
+package com.one.homeserverjava.utils;
 
 import android.app.Application;
 

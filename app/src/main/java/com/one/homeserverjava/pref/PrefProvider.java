@@ -33,7 +33,7 @@ public class PrefProvider implements Preferences {
 
     @Override
     public void setLocalBaseUrl(String url) {
-        client.edit().putString("LocalUrl",url).commit();
+        client.edit().putString("localBaseUrl",url).commit();
     }
 
     @Override
