@@ -2,6 +2,7 @@ package com.one.homeserverjava.ui.viewModel;
 
 import android.app.Application;
 import android.speech.tts.UtteranceProgressListener;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -119,14 +120,15 @@ public class HomeViewModel extends BaseViewModel{
     }
     private void checkPi(){
         repository.api.resource
-                .check().enqueue(new Callback<ServerResponse>() {
+                .check().enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 apiLiveData.setValue(AsyncResponse.piIsOnline());
             }
 
             @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("myLogs", "onFailure: "+t);
                 apiLiveData.setValue(AsyncResponse.piIsOffline());
             }
         });

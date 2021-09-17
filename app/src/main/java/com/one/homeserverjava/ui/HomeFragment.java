@@ -68,17 +68,21 @@ public class HomeFragment extends Fragment {
             case AsyncResponse.WAITING:
                 break;
             case AsyncResponse.STATUS_NOT_STARTED:
-                Log.d("myLogs", "handleApiResponse: Pi is not running");
                 PiNotRunning();
                 break;
             case AsyncResponse.STATUS_STARTED:
-                Log.d("myLogs", "handleApiResponse: Pi is running");
+                PiIsRunning(true);
                 break;
             case AsyncResponse.STATUS_SUCCESS:
                 break;
         }
 
     }
+
+    public void PiIsRunning(boolean showDialog){
+        if(showDialog) Utils.notifyDialogBox(getFragmentManager(),"Connected Successfully","Connected with Pi",Utils.MSG);
+    }
+
 
     public void PiNotRunning(){
         Utils.notifyDialogBox(getFragmentManager(),"Connectivity Error","Seems like Pi is not Running on your Network.",Utils.MSG);

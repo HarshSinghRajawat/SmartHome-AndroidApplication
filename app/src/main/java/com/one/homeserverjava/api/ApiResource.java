@@ -23,5 +23,5 @@ public interface ApiResource {
     Call<ServerResponse> getTemp();
 
     @GET("/check&&check=2sa69y23dgf")
-    Call<ServerResponse> check();
+    Call<Void> check();
 }
