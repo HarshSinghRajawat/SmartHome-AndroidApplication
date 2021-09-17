@@ -8,11 +8,10 @@
     style="@style/Theme.MaterialComponents.Light.Dialog"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/view"
+    <View
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:background="@android:color/white"
+        android:background="#Ecf3f9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,28 +25,48 @@
         android:text="Enter Base URL:"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/url"
         android:layout_width="250dp"
         android:layout_height="60dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/view"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
+    <RadioGroup
+        android:id="@+id/radioBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="@id/url"
+        app:layout_constraintTop_toBottomOf="@+id/url">
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:id="@+id/http"
+        android:text="http://"
+         />
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:id="@+id/https"
+        android:layout_height="22dp"
+        android:text="https://" />
+    </RadioGroup>
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/update"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:icon="@drawable/ic_baseline_send"
         app:iconSize="28dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/url" />
 
     <ProgressBar
@@ -55,15 +74,68 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/view"
-        app:layout_constraintEnd_toEndOf="@id/view"
-        app:layout_constraintStart_toStartOf="@id/view"
-        app:layout_constraintTop_toTopOf="@id/view" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/msg_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="title"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="150dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/cardview_dark_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/msg_title" />
+
+    <TextView
+        android:id="@+id/msg_description"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        tools:text="this is description"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator" />
+
+    <TextView
+        android:id="@+id/dismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DISMISS"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:textSize="15sp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/view_group"
-        android:layout_width="match_parent"
+        android:id="@+id/showMsg"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="msg_title, msg_description,separator,dismiss"/>
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/getInput"
+        android:layout_width="wrap_content"
         android:visibility="visible"
-        android:layout_height="match_parent"
-        app:constraint_referenced_ids="url, update,textView3"/>
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="url, update,textView3, radioBtn"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

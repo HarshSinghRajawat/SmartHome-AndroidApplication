@@ -6,13 +6,15 @@ import com.one.homeserverjava.api.ApiProvider;
 import com.one.homeserverjava.pref.PrefProvider;
 
 public class Repository {
-    public final ApiProvider api;
+    public ApiProvider api;
     public final PrefProvider preferences;
     public static Repository INSTANCE;
 
     public Repository(Application app) {
-        api = ApiProvider.getInstance(app);
         preferences =PrefProvider.getInstance(app);
+    }
+    public void connectAPIs(Application app){
+        api=ApiProvider.getInstance(app);
     }
 
     public static Repository getInstance(Application app){

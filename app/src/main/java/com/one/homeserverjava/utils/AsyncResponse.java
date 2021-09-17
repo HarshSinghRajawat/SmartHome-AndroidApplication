@@ -1,11 +1,12 @@
 package com.one.homeserverjava.utils;
 
 public class AsyncResponse<T,E> {
-    public static final int STATUS_NOT_STARTED = 0;
-    public static final int STATUS_STARTED = 1;
-    public static final int STATUS_LOADING = 2;
-    public static final int STATUS_SUCCESS = 3;
-    public static final int STATUS_ERROR = 4;
+    public static final int WAITING = 0;
+    public static final int STATUS_NOT_STARTED = 1;
+    public static final int STATUS_STARTED = 2;
+    public static final int STATUS_LOADING = 3;
+    public static final int STATUS_SUCCESS = 4;
+    public static final int STATUS_ERROR = 5;
 
     public final T value;
     public final E error;
@@ -22,12 +23,16 @@ public class AsyncResponse<T,E> {
         return new AsyncResponse(e, null, STATUS_ERROR, message);
     }
 
+
     public static <T,E> AsyncResponse<T,E> piIsOnline(){
         return new AsyncResponse(0, null, STATUS_STARTED, null);
     }
 
     public static <T,E> AsyncResponse<T,E> piIsOffline(){
         return new AsyncResponse(null, null, STATUS_NOT_STARTED, null);
+    }
+    public static <T,E> AsyncResponse<T,E> notMadeRequestYet(){
+        return new AsyncResponse(null, null, WAITING, null);
     }
 
 

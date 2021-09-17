@@ -1,6 +1,7 @@
 package com.one.homeserverjava.ui.viewModel;
 
 import android.app.Application;
+import android.speech.tts.UtteranceProgressListener;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -8,6 +9,7 @@ import com.one.homeserverjava.utils.AsyncResponse;
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
+import com.one.homeserverjava.utils.Utils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,6 +23,8 @@ public class HomeViewModel extends BaseViewModel{
     public final int SET_STATE=3;
     public final int SET_NAME=4;
 
+    public boolean hasLocalIP=false;
+
 
     private MutableLiveData<AsyncResponse<ServerResponse,Exception>> apiLiveData;
 
@@ -31,6 +35,8 @@ public class HomeViewModel extends BaseViewModel{
     public void sendRequest(int check,String relay,String data){
         RelayRequest relayRequest=null;
         SetNameRequest setNameRequest=null;
+
+        repository.connectAPIs(getApplication());
 
         switch(check){
             case CHECK: checkPi();
@@ -49,6 +55,7 @@ public class HomeViewModel extends BaseViewModel{
                 break;
         }
     }
+
 
     public boolean checkLocalPiAddress(){
         return repository.preferences.getLocalBaseUrl()!="";
@@ -95,6 +102,7 @@ public class HomeViewModel extends BaseViewModel{
             }
         });
     }
+
     private void getTemp(){
         repository.api.resource
                 .getTemp().enqueue(new Callback<ServerResponse>() {
@@ -123,8 +131,11 @@ public class HomeViewModel extends BaseViewModel{
             }
         });
     }
-
+    public void setHasLocalIP(boolean hasLocalIP) {
+        this.hasLocalIP = hasLocalIP;
+    }
     public MutableLiveData<AsyncResponse<ServerResponse, Exception>> getApiLiveData() {
+        if(apiLiveData == null) apiLiveData = new MutableLiveData<>(AsyncResponse.notMadeRequestYet());
         return apiLiveData;
     }
     public void setBaseURL(String url){

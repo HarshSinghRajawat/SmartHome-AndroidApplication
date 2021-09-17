@@ -20,7 +20,7 @@ public class ApiProvider {
 
     public static ApiProvider getInstance(Application app){
         synchronized (ApiProvider.class){
-            if (INSTANCE == null && PrefProvider.INSTANCE!=null) {
+            if (INSTANCE == null) {
                 INSTANCE = new ApiProvider(app);
             }
         }
