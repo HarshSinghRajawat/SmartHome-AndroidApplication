@@ -38,6 +38,7 @@ public class HomeViewModel extends BaseViewModel{
         SetNameRequest setNameRequest=null;
 
         repository.connectAPIs(getApplication());
+        apiLiveData.postValue(AsyncResponse.loading());
 
         switch(check){
             case CHECK: checkPi();

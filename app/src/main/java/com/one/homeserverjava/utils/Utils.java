@@ -10,6 +10,7 @@ public class Utils {
     public static final int GET_IP=0;
     public static final int LOADING=1;
     public static final int MSG=3;
+    public static DialogBox dialog;
 
     public static void notifyDialogBox(FragmentManager manager,String title,String des, int FLAG){
 
@@ -19,7 +20,10 @@ public class Utils {
         if(FLAG==MSG){
             bundle.putString("title",title);
             bundle.putString("des",des);
+        }else if(FLAG==LOADING){
+            dialog=dialogBox;
         }
+
         bundle.putInt("flag",FLAG);
 
         dialogBox.setArguments(bundle);

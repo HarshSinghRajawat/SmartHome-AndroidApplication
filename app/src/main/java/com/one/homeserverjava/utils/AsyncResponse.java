@@ -34,6 +34,9 @@ public class AsyncResponse<T,E> {
     public static <T,E> AsyncResponse<T,E> notMadeRequestYet(){
         return new AsyncResponse(null, null, WAITING, null);
     }
+    public static <T,E> AsyncResponse<T,E> loading(){
+        return new AsyncResponse(null, null, STATUS_LOADING, null);
+    }
 
 
     public boolean isError(){

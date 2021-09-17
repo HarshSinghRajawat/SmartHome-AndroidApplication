@@ -8,5 +8,5 @@ public class ServerResponse {
     @Json(name="status")
     boolean status;
 
-    List json;
+    List<Relay> relayList;
 }
