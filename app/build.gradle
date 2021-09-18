@@ -62,7 +62,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:2.3.5"
     implementation "com.emreeran.permissionlivedata:permissionlivedata:1.0.4"
 
-
+    implementation 'com.google.code.gson:gson:2.8.8'
 
     //For Fragment
     // Java language implementation

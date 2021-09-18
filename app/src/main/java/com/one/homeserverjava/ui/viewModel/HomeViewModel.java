@@ -6,11 +6,15 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.one.homeserverjava.models.Relay;
 import com.one.homeserverjava.utils.AsyncResponse;
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
 import com.one.homeserverjava.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,15 +96,15 @@ public class HomeViewModel extends BaseViewModel{
     }
     private void getData(){
         repository.api.resource
-                .getData().enqueue(new Callback<ServerResponse>() {
+                .getData().enqueue(new Callback<List<Relay>>() {
             @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-
+            public void onResponse(Call<List<Relay>> call, Response<List<Relay>> response) {
+                apiLiveData.setValue(AsyncResponse.success(response.body()));
             }
 
             @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-
+            public void onFailure(Call<List<Relay>> call, Throwable t) {
+                apiLiveData.setValue(AsyncResponse.error(t,t.getMessage()));
             }
         });
     }

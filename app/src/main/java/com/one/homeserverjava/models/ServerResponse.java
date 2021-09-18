@@ -1,12 +1,12 @@
 package com.one.homeserverjava.models;
 
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
 
 public class ServerResponse {
-    @Json(name="status")
+    @SerializedName("status")
     boolean status;
+    @SerializedName("output")
+    String temperature;
 
-    List<Relay> relayList;
 }

@@ -1,18 +1,83 @@
 package com.one.homeserverjava.models;
 
-import com.squareup.moshi.Json;
+import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.SerializedName;
 
 public class Relay {
-    @Json(name = "status")
+    @SerializedName("status")
     String status;
-    @Json(name = "relay")
+    @SerializedName("relay")
     int relay;
-    @Json(name = "relay_name")
+    @SerializedName("relay_name")
     String relay_name;
-    @Json(name = "time")
+    @SerializedName("time")
     String time;
-    @Json(name = "date")
+    @SerializedName("date")
     String date;
-    @Json(name = "method")
+    @SerializedName("method")
     String method;
+    @SerializedName("output")
+    String output;
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
+    }
+
+    @Override
+    public String toString() {
+        return "\nRelay name:- "+relay_name+"\nStatus:- "+status+"\nOutput:- "+output;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getRelay() {
+        return relay;
+    }
+
+    public void setRelay(int relay) {
+        this.relay = relay;
+    }
+
+    public String getRelay_name() {
+        return relay_name;
+    }
+
+    public void setRelay_name(String relay_name) {
+        this.relay_name = relay_name;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 }

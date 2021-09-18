@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment {
 
     public void checkPiConnectivity(){
         if(viewModel.hasLocalIP) {
-            Log.d("myLogs", "checkPiConnectivity: making Request");
             viewModel.sendRequest(viewModel.CHECK, null, null);
 
         }else{
@@ -75,11 +74,19 @@ public class HomeFragment extends Fragment {
             case AsyncResponse.STATUS_STARTED:
                 dismissDialog();
                 PiIsRunning(true);
+                callGetDataAPI();
                 break;
             case AsyncResponse.STATUS_SUCCESS:
+                dismissDialog();
+                break;
+            case AsyncResponse.STATUS_ERROR:
+                dismissDialog();
+                Utils.notifyDialogBox(getFragmentManager(),"Unable to call API", response.message,Utils.MSG);
                 break;
         }
-
+    }
+    public void callGetDataAPI(){
+        viewModel.sendRequest(viewModel.GET_DATA, null,null);
     }
     public void dismissDialog(){
         if(Utils.dialog!=null){

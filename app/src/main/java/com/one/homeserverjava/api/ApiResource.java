@@ -1,8 +1,12 @@
 package com.one.homeserverjava.api;
 
+import com.one.homeserverjava.models.Relay;
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,7 +18,7 @@ public interface ApiResource {
     Call<ServerResponse> setRelay(@Body RelayRequest body);
 
     @GET("/get&&check=2sa69y23dgf")
-    Call<ServerResponse> getData();
+    Call<List<Relay>> getData();
 
     @POST("/setname")
     Call<ServerResponse> setName(@Body SetNameRequest body);

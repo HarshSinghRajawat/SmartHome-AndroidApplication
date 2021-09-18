@@ -1,5 +1,9 @@
 package com.one.homeserverjava.utils;
 
+import com.one.homeserverjava.models.Relay;
+
+import java.util.List;
+
 public class AsyncResponse<T,E> {
     public static final int WAITING = 0;
     public static final int STATUS_NOT_STARTED = 1;
@@ -15,11 +19,11 @@ public class AsyncResponse<T,E> {
 
     public final String message;
 
-    public static <T,E> AsyncResponse<T,E> success(T t){
-        return new AsyncResponse(null, t, STATUS_SUCCESS, null);
+    public static <T,E> AsyncResponse<T,E> success(List<Relay> list){
+        return new AsyncResponse(list, null, STATUS_SUCCESS, null);
     }
 
-    public static <T,E> AsyncResponse<T,E> error(E e, String message){
+    public static <T,E> AsyncResponse<T,E> error(Throwable e, String message){
         return new AsyncResponse(e, null, STATUS_ERROR, message);
     }
 
