@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.util.Log;
+import android.widget.ListView;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.one.homeserverjava.models.Relay;
 import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
@@ -166,13 +169,16 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     public Adapter populateList(Activity activity, List<Relay> list){
         ArrayList<Relay> relays=new ArrayList<>();
         relays.addAll(list);
-        relays.remove(8);
         Adapter adapter=new Adapter(activity,relays,this);
         return adapter;
     }
 
 
-    public void getRealTimeData(){
+    public void getRealTimeData(Activity activity, ListView view){
+        ArrayList<Relay> list = new ArrayList<>();
+        Adapter adapter=new Adapter(activity,list,this);
+        view.setAdapter(adapter);
+
         relayDatabase.orderByKey()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -181,7 +187,13 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
                 dataSnapshot.getChildren().forEach(new Consumer<DataSnapshot>() {
                     @Override
                     public void accept(DataSnapshot dataSnapshot) {
-                        Log.d("myTest", "onDataChange: "+dataSnapshot.getKey());
+                        String data = dataSnapshot.getKey();
+                        int relay = Integer.parseInt(data.replace("relay",""));
+                        String value = (String) dataSnapshot.getValue();
+                        Log.d("myTest", "onDataChange: "+relay+"-"+value);
+
+                        list.add(new Relay(value,relay,"",null,null,null,null));
+                        adapter.notifyDataSetChanged();
                     }
                 });
 
@@ -192,6 +204,8 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
 
             }
         });
+
+
     }
 
 

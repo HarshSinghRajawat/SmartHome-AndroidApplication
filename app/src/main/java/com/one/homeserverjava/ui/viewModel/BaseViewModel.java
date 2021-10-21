@@ -25,7 +25,7 @@ public class BaseViewModel extends AndroidViewModel {
 
         firebaseAuth=FirebaseAuth.getInstance();
 
-        relayDatabase = FirebaseDatabase.getInstance().getReference("/admin/relays");
+        relayDatabase = FirebaseDatabase.getInstance().getReference("/"+firebaseAuth.getCurrentUser().getUid()+"/admin/relays");
         piInfoDatabase = FirebaseDatabase.getInstance().getReference("/admin/pi");
         errDatabase = FirebaseDatabase.getInstance().getReference("/admin/error");
     }

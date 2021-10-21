@@ -19,9 +19,7 @@ import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
 import java.util.ArrayList;
 
 public class Adapter extends ArrayAdapter<Relay> {
-    boolean toggle;
     LocalNetworkCallbacks callbacks;
-    Relay relay;
 
     public Adapter(Activity context, ArrayList<Relay> data, LocalNetworkCallbacks callback){
         super(context,0,data);
@@ -35,16 +33,34 @@ public class Adapter extends ArrayAdapter<Relay> {
             listItem= LayoutInflater.from(getContext()).inflate(R.layout.relay_list,parent,false);
         }
 
-        relay=getItem(position);
+        Relay relay=getItem(position);
+
 
         TextView textView= listItem.findViewById(R.id.relayName);
         Button btn= listItem.findViewById(R.id.relaySwitch);
 
         textView.setText(relay.getRelay_name());
 
-        btn.setOnClickListener(this::onClick);
-        toggle=relay.getStatus().contains("on");
-        if(toggle){
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button btn= view.findViewById(R.id.relaySwitch);
+
+                boolean toggle=relay.setStatus(
+                        //updating and setting status
+                        relay.getStatus().contains("on")?"off":"on"
+                );
+
+
+                view.setBackgroundColor( toggle ? Color.parseColor("#4CAF50") : Color.parseColor("#F44336"));
+                btn.setText( toggle ? "ON":"OFF");
+
+                callbacks.setRelays(relay);
+            }
+        });
+
+
+        if(relay.getStatus().contains("on")){
             btn.setText("ON");
             btn.setBackgroundColor(Color.parseColor("#4CAF50"));
         }else{
@@ -55,14 +71,4 @@ public class Adapter extends ArrayAdapter<Relay> {
         return listItem;
     }
 
-    private void onClick(View view) {
-        Button btn= view.findViewById(R.id.relaySwitch);
-
-        toggle=!toggle;
-
-        view.setBackgroundColor( toggle ? Color.parseColor("#4CAF50") : Color.parseColor("#F44336"));
-        btn.setText( toggle ? "ON":"OFF");
-
-        callbacks.setRelays(relay);
-    }
 }

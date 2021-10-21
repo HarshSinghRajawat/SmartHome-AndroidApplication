@@ -20,6 +20,16 @@ public class Relay {
     @SerializedName("output")
     String output;
 
+    public Relay(String status, int relay, String relay_name, String time, String date, String method, String output) {
+        this.status = status;
+        this.relay = relay;
+        this.relay_name = relay_name;
+        this.time = time;
+        this.date = date;
+        this.method = method;
+        this.output = output;
+    }
+
     public String getOutput() {
         return output;
     }
@@ -37,8 +47,9 @@ public class Relay {
         return status;
     }
 
-    public void setStatus(String status) {
+    public boolean setStatus(String status) {
         this.status = status;
+        return this.status!="off";
     }
 
     public int getRelay() {

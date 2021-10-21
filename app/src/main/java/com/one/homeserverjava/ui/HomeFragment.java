@@ -27,7 +27,7 @@ public class HomeFragment extends Fragment {
         views = FragmentHomeBinding.inflate(getLayoutInflater(),container,false);
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        viewModel.getRealTimeData();
+        viewModel.getRealTimeData(getActivity(),views.list);
 //        initAPIListener();
 //        getLocalIP();
         return views.getRoot();
