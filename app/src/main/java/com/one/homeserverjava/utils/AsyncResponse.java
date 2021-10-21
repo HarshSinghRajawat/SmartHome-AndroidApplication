@@ -1,6 +1,7 @@
 package com.one.homeserverjava.utils;
 
 import com.one.homeserverjava.models.Relay;
+import com.one.homeserverjava.models.ServerResponse;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class AsyncResponse<T,E> {
     public static final int STATUS_LOADING = 3;
     public static final int STATUS_SUCCESS = 4;
     public static final int STATUS_ERROR = 5;
+    public static final int GOT_DATA=6;
 
     public final T value;
     public final E error;
@@ -26,12 +28,15 @@ public class AsyncResponse<T,E> {
     public static <T,E> AsyncResponse<T,E> error(Throwable e, String message){
         return new AsyncResponse(e, null, STATUS_ERROR, message);
     }
-
-
+    public static <T,E> AsyncResponse<T,E> failed(String message){
+        return new AsyncResponse(null, null, STATUS_ERROR, message);
+    }
+    public static <T,E> AsyncResponse<T,E> getData(ServerResponse response){
+        return new AsyncResponse(response, null, GOT_DATA, null);
+    }
     public static <T,E> AsyncResponse<T,E> piIsOnline(){
         return new AsyncResponse(0, null, STATUS_STARTED, null);
     }
-
     public static <T,E> AsyncResponse<T,E> piIsOffline(){
         return new AsyncResponse(null, null, STATUS_NOT_STARTED, null);
     }
@@ -40,6 +45,9 @@ public class AsyncResponse<T,E> {
     }
     public static <T,E> AsyncResponse<T,E> loading(){
         return new AsyncResponse(null, null, STATUS_LOADING, null);
+    }
+    public static <T,E> AsyncResponse<T,E> success(){
+        return new AsyncResponse(null, null, STATUS_SUCCESS, null);
     }
 
 

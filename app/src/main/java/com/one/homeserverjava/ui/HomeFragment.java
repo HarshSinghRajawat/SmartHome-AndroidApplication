@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import com.one.homeserverjava.utils.Utils;
 public class HomeFragment extends Fragment {
     FragmentHomeBinding views;
     HomeViewModel viewModel;
+    DialogBox notificationDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,8 +27,9 @@ public class HomeFragment extends Fragment {
         views = FragmentHomeBinding.inflate(getLayoutInflater(),container,false);
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        initListener();
-        getLocalIP();
+        viewModel.getRealTimeData();
+//        initAPIListener();
+//        getLocalIP();
         return views.getRoot();
     }
 
@@ -37,7 +38,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void initListener(){
+    public void initAPIListener(){
         viewModel.getApiLiveData().observe(getViewLifecycleOwner(),this::handleApiResponse);
     }
 
@@ -63,28 +64,34 @@ public class HomeFragment extends Fragment {
 
     private void handleApiResponse(AsyncResponse<ServerResponse, Exception> response) {
 
+        if(notificationDialog!=null){
+            notificationDialog.dismiss();
+        }
+
         switch (response.status){
             case AsyncResponse.STATUS_LOADING:
-                Utils.notifyDialogBox(getFragmentManager(),null,null,Utils.LOADING);
+                notificationDialog= Utils.notifyDialogBox(getFragmentManager(),null,null,Utils.LOADING);
                 break;
             case AsyncResponse.STATUS_NOT_STARTED:
-                dismissDialog();
                 PiNotRunning();
                 break;
             case AsyncResponse.STATUS_STARTED:
-                dismissDialog();
                 PiIsRunning(true);
                 callGetDataAPI();
                 break;
             case AsyncResponse.STATUS_SUCCESS:
-                dismissDialog();
+                break;
+            case AsyncResponse.GOT_DATA:
+                views.list.setAdapter(
+                        viewModel.populateList(getActivity(),response.value.getRelayList())
+                );
                 break;
             case AsyncResponse.STATUS_ERROR:
-                dismissDialog();
                 Utils.notifyDialogBox(getFragmentManager(),"Unable to call API", response.message,Utils.MSG);
                 break;
         }
     }
+
     public void callGetDataAPI(){
         viewModel.sendRequest(viewModel.GET_DATA, null,null);
     }

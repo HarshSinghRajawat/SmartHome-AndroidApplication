@@ -13,6 +13,7 @@ public class Repository {
     public Repository(Application app) {
         preferences =PrefProvider.getInstance(app);
     }
+
     public void connectAPIs(Application app){
         api=ApiProvider.getInstance(app);
     }

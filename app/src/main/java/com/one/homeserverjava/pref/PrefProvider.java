@@ -40,4 +40,14 @@ public class PrefProvider implements Preferences {
     public boolean checkLocalBaseUrl() {
         return !client.getString("localBaseUrl","").equals("");
     }
+
+    @Override
+    public void setUserStatus(boolean status) {
+        client.edit().putBoolean("isLoggedIn",status).commit();
+    }
+
+    @Override
+    public boolean getUserStatus() {
+        return client.getBoolean("isLoggedIn",false);
+    }
 }

@@ -5,7 +5,6 @@ import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;

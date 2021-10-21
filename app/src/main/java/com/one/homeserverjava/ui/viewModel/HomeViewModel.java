@@ -1,27 +1,34 @@
 package com.one.homeserverjava.ui.viewModel;
 
+import android.app.Activity;
 import android.app.Application;
-import android.speech.tts.UtteranceProgressListener;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.one.homeserverjava.models.Relay;
+import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
+import com.one.homeserverjava.utils.Adapter;
 import com.one.homeserverjava.utils.AsyncResponse;
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
-import com.one.homeserverjava.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeViewModel extends BaseViewModel{
+public class HomeViewModel extends BaseViewModel implements LocalNetworkCallbacks {
     public final int CHECK=0;
     public final int GET_DATA=1;
     public final int GET_TEMP=2;
@@ -47,9 +54,9 @@ public class HomeViewModel extends BaseViewModel{
         switch(check){
             case CHECK: checkPi();
                 break;
-            case GET_DATA:getData();
+            case GET_DATA: getData();
                 break;
-            case GET_TEMP:getTemp();
+            case GET_TEMP: getTemp();
                 break;
             case SET_STATE:
                 relayRequest=new RelayRequest(relay,data);
@@ -71,12 +78,16 @@ public class HomeViewModel extends BaseViewModel{
                 .setRelay(relayRequest).enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-
+                if(response.isSuccessful()){
+                    apiLiveData.setValue(AsyncResponse.success());
+                }else{
+                    apiLiveData.setValue(AsyncResponse.failed("API Call Fail"));
+                }
             }
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-
+                apiLiveData.setValue(AsyncResponse.error(t.fillInStackTrace(),"API Call Fail"));
             }
         });
     }
@@ -99,7 +110,9 @@ public class HomeViewModel extends BaseViewModel{
                 .getData().enqueue(new Callback<List<Relay>>() {
             @Override
             public void onResponse(Call<List<Relay>> call, Response<List<Relay>> response) {
-                apiLiveData.setValue(AsyncResponse.success(response.body()));
+                ServerResponse res=new ServerResponse();
+                res.setRelayList(response.body());
+                apiLiveData.setValue(AsyncResponse.getData(res));
             }
 
             @Override
@@ -141,11 +154,49 @@ public class HomeViewModel extends BaseViewModel{
     public void setHasLocalIP(boolean hasLocalIP) {
         this.hasLocalIP = hasLocalIP;
     }
+
     public MutableLiveData<AsyncResponse<ServerResponse, Exception>> getApiLiveData() {
         if(apiLiveData == null) apiLiveData = new MutableLiveData<>(AsyncResponse.notMadeRequestYet());
         return apiLiveData;
     }
     public void setBaseURL(String url){
         repository.preferences.setLocalBaseUrl(url);
+    }
+
+    public Adapter populateList(Activity activity, List<Relay> list){
+        ArrayList<Relay> relays=new ArrayList<>();
+        relays.addAll(list);
+        relays.remove(8);
+        Adapter adapter=new Adapter(activity,relays,this);
+        return adapter;
+    }
+
+
+    public void getRealTimeData(){
+        relayDatabase.orderByKey()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataSnapshot.getChildren().forEach(new Consumer<DataSnapshot>() {
+                    @Override
+                    public void accept(DataSnapshot dataSnapshot) {
+                        Log.d("myTest", "onDataChange: "+dataSnapshot.getKey());
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void setRelays(Relay relay) {
+        Log.d("myTest","Wokring");
     }
 }

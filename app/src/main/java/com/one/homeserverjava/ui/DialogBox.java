@@ -69,6 +69,8 @@ public class DialogBox extends DialogFragment {
             url="https://"+url;
         }else{
             Toast.makeText(getContext(),"Please Select a valid Protocol",Toast.LENGTH_LONG).show();
+            view.performClick();
+            return;
         }
         mainViewModel.setBaseURL(url);
         mainViewModel.setHasLocalIP(true);

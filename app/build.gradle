@@ -1,10 +1,22 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
-
+apply plugin: 'realm-android'
 android {
     compileSdk 30
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/native-image/io.netty/transport/native-image.properties'
+        exclude 'META-INF/native-image/io.netty/transport/reflection-config.json'
+        exclude 'META-INF/native-image/io.netty/codec-http/native-image.properties'
+        exclude 'META-INF/native-image/io.netty/buffer/native-image.properties'
+        exclude 'META-INF/native-image/io.netty/handler/native-image.properties'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/io.netty.versions.properties'
+        exclude 'META-INF/native-image/io.netty/common/native-image.properties'
 
+    }
     defaultConfig {
         applicationId "com.one.homeserverjava"
         minSdk 21
@@ -69,4 +81,18 @@ dependencies {
     implementation "androidx.fragment:fragment:$fragment_version"
     // Kotlin
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    ext.realm_version = '10.8.0'
+    api "io.realm:realm-annotations:$realm_version"
+    api "io.realm:realm-android-library:$realm_version"
+
+    //Firebase Auth
+    implementation platform('com.google.firebase:firebase-bom:28.4.2')
+    implementation 'com.google.firebase:firebase-auth'
+
+    //Firebase Database
+    implementation 'com.google.firebase:firebase-database:19.6.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 }

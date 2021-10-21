@@ -12,7 +12,7 @@ public class Utils {
     public static final int MSG=3;
     public static DialogBox dialog;
 
-    public static void notifyDialogBox(FragmentManager manager,String title,String des, int FLAG){
+    public static DialogBox notifyDialogBox(FragmentManager manager,String title,String des, int FLAG){
 
         Bundle bundle=new Bundle();
         DialogBox dialogBox=new DialogBox();
@@ -29,6 +29,7 @@ public class Utils {
         dialogBox.setArguments(bundle);
         dialogBox.show(manager,null);
 
+        return dialogBox;
     }
 
 }
