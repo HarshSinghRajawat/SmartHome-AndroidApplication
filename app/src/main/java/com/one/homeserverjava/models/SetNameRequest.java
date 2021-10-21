@@ -1,6 +1,6 @@
 package com.one.homeserverjava.models;
 
-public class SetNameRequest {//'{ "Relay":"$relay" , "Name":"$name" }'
+public class SetNameRequest {//'{ "RelayData":"$relay" , "Name":"$name" }'
     String relay;
     String relayName;
     public SetNameRequest(String relay, String relayName) {

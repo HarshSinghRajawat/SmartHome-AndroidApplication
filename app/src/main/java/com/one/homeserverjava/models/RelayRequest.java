@@ -1,7 +1,7 @@
 package com.one.homeserverjava.models;
 
 public class RelayRequest {
-    //'{ "Relay":"$relay" , "status":"$set" }'
+    //'{ "RelayData":"$relay" , "status":"$set" }'
     String relay;
     String status;
 

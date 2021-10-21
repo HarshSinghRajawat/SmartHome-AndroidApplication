@@ -1,6 +1,6 @@
 package com.one.homeserverjava.utils;
 
-import com.one.homeserverjava.models.Relay;
+import com.one.homeserverjava.models.RelayData;
 import com.one.homeserverjava.models.ServerResponse;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class AsyncResponse<T,E> {
 
     public final String message;
 
-    public static <T,E> AsyncResponse<T,E> success(List<Relay> list){
+    public static <T,E> AsyncResponse<T,E> success(List<RelayData> list){
         return new AsyncResponse(list, null, STATUS_SUCCESS, null);
     }
 

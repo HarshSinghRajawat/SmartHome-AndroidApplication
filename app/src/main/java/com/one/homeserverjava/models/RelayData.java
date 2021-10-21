@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Relay {
+public class RelayData {
     @SerializedName("status")
     String status;
     @SerializedName("relay")
@@ -20,7 +20,7 @@ public class Relay {
     @SerializedName("output")
     String output;
 
-    public Relay(String status, int relay, String relay_name, String time, String date, String method, String output) {
+    public RelayData(String status, int relay, String relay_name, String time, String date, String method, String output) {
         this.status = status;
         this.relay = relay;
         this.relay_name = relay_name;
@@ -40,7 +40,7 @@ public class Relay {
 
     @Override
     public String toString() {
-        return "\nRelay name:- "+relay_name+"\nStatus:- "+status+"\nOutput:- "+output;
+        return "\nRelayData name:- "+relay_name+"\nStatus:- "+status+"\nOutput:- "+output;
     }
 
     public String getStatus() {

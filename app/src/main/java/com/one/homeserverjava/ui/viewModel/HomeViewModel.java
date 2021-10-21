@@ -9,12 +9,10 @@ import android.widget.ListView;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.one.homeserverjava.models.Relay;
+import com.one.homeserverjava.models.RelayData;
 import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
 import com.one.homeserverjava.utils.Adapter;
 import com.one.homeserverjava.utils.AsyncResponse;
@@ -23,7 +21,9 @@ import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import retrofit2.Call;
@@ -110,16 +110,16 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     }
     private void getData(){
         repository.api.resource
-                .getData().enqueue(new Callback<List<Relay>>() {
+                .getData().enqueue(new Callback<List<RelayData>>() {
             @Override
-            public void onResponse(Call<List<Relay>> call, Response<List<Relay>> response) {
+            public void onResponse(Call<List<RelayData>> call, Response<List<RelayData>> response) {
                 ServerResponse res=new ServerResponse();
                 res.setRelayList(response.body());
                 apiLiveData.setValue(AsyncResponse.getData(res));
             }
 
             @Override
-            public void onFailure(Call<List<Relay>> call, Throwable t) {
+            public void onFailure(Call<List<RelayData>> call, Throwable t) {
                 apiLiveData.setValue(AsyncResponse.error(t,t.getMessage()));
             }
         });
@@ -166,16 +166,16 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
         repository.preferences.setLocalBaseUrl(url);
     }
 
-    public Adapter populateList(Activity activity, List<Relay> list){
-        ArrayList<Relay> relays=new ArrayList<>();
-        relays.addAll(list);
-        Adapter adapter=new Adapter(activity,relays,this);
+    public Adapter populateList(Activity activity, List<RelayData> list){
+        ArrayList<RelayData> relayData =new ArrayList<>();
+        relayData.addAll(list);
+        Adapter adapter=new Adapter(activity, relayData,this);
         return adapter;
     }
 
 
     public void getRealTimeData(Activity activity, ListView view){
-        ArrayList<Relay> list = new ArrayList<>();
+        ArrayList<RelayData> list = new ArrayList<>();
         Adapter adapter=new Adapter(activity,list,this);
         view.setAdapter(adapter);
 
@@ -187,12 +187,15 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
                 dataSnapshot.getChildren().forEach(new Consumer<DataSnapshot>() {
                     @Override
                     public void accept(DataSnapshot dataSnapshot) {
-                        String data = dataSnapshot.getKey();
-                        int relay = Integer.parseInt(data.replace("relay",""));
-                        String value = (String) dataSnapshot.getValue();
-                        Log.d("myTest", "onDataChange: "+relay+"-"+value);
+                        HashMap<String,Object> relayData = (HashMap<String, Object>) dataSnapshot.getValue();
+                        long relay = (long) relayData.get("relay");
 
-                        list.add(new Relay(value,relay,"",null,null,null,null));
+                        String value = (String) relayData.get("status");
+                        String relayName = (String) relayData.get("relay_name");
+
+                        relayName = relayName==null || relayName.isEmpty() ? "notDefined" : relayName;
+
+                        list.add(new RelayData(value,(int)relay,relayName,null,null,null,null));
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -210,7 +213,12 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
 
 
     @Override
-    public void setRelays(Relay relay) {
-        Log.d("myTest","Wokring");
+    public void setRelays(RelayData relayData) {
+        Map<String, Object> map = new HashMap<>();
+        Log.d("myTest", relayData.getRelay()+"-"+ relayData.getStatus());
+
+        map.put("relay"+relayData.getRelay(),relayData);
+
+        relayDatabase.updateChildren(map);
     }
 }

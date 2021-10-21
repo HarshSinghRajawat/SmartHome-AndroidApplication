@@ -1,6 +1,6 @@
 package com.one.homeserverjava.api;
 
-import com.one.homeserverjava.models.Relay;
+import com.one.homeserverjava.models.RelayData;
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
@@ -17,7 +17,7 @@ public interface ApiResource {
     Call<ServerResponse> setRelay(@Body RelayRequest body);
 
     @GET("/get&&check=2sa69y23dgf")
-    Call<List<Relay>> getData();
+    Call<List<RelayData>> getData();
 
     @POST("/setname")
     Call<ServerResponse> setName(@Body SetNameRequest body);

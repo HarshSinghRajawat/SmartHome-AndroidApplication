@@ -11,13 +11,13 @@ public class ServerResponse {
     @SerializedName("output")
     String temperature;
 
-    List<Relay> relayList;
+    List<RelayData> relayDataList;
 
-    public List<Relay> getRelayList() {
-        return relayList;
+    public List<RelayData> getRelayList() {
+        return relayDataList;
     }
 
-    public void setRelayList(List<Relay> relayList) {
-        this.relayList = relayList;
+    public void setRelayList(List<RelayData> relayDataList) {
+        this.relayDataList = relayDataList;
     }
 }

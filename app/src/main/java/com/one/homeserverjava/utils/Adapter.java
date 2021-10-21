@@ -12,16 +12,16 @@ import android.widget.TextView;
 
 
 import com.one.homeserverjava.R;
-import com.one.homeserverjava.models.Relay;
+import com.one.homeserverjava.models.RelayData;
 import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
 
 
 import java.util.ArrayList;
 
-public class Adapter extends ArrayAdapter<Relay> {
+public class Adapter extends ArrayAdapter<RelayData> {
     LocalNetworkCallbacks callbacks;
 
-    public Adapter(Activity context, ArrayList<Relay> data, LocalNetworkCallbacks callback){
+    public Adapter(Activity context, ArrayList<RelayData> data, LocalNetworkCallbacks callback){
         super(context,0,data);
         this.callbacks=callback;
     }
@@ -33,34 +33,34 @@ public class Adapter extends ArrayAdapter<Relay> {
             listItem= LayoutInflater.from(getContext()).inflate(R.layout.relay_list,parent,false);
         }
 
-        Relay relay=getItem(position);
+        RelayData relayData =getItem(position);
 
 
         TextView textView= listItem.findViewById(R.id.relayName);
         Button btn= listItem.findViewById(R.id.relaySwitch);
 
-        textView.setText(relay.getRelay_name());
+        textView.setText(relayData.getRelay_name());
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Button btn= view.findViewById(R.id.relaySwitch);
 
-                boolean toggle=relay.setStatus(
+                boolean toggle= relayData.setStatus(
                         //updating and setting status
-                        relay.getStatus().contains("on")?"off":"on"
+                        relayData.getStatus().contains("on")?"off":"on"
                 );
 
 
                 view.setBackgroundColor( toggle ? Color.parseColor("#4CAF50") : Color.parseColor("#F44336"));
                 btn.setText( toggle ? "ON":"OFF");
 
-                callbacks.setRelays(relay);
+                callbacks.setRelays(relayData);
             }
         });
 
 
-        if(relay.getStatus().contains("on")){
+        if(relayData.getStatus().contains("on")){
             btn.setText("ON");
             btn.setBackgroundColor(Color.parseColor("#4CAF50"));
         }else{
