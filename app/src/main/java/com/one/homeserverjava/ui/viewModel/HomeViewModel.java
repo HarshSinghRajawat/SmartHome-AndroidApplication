@@ -179,7 +179,7 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
         Adapter adapter=new Adapter(activity,list,this);
         view.setAdapter(adapter);
 
-        relayDatabase.orderByKey()
+        repository.relayDatabase.orderByKey()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -219,6 +219,6 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
 
         map.put("relay"+relayData.getRelay(),relayData);
 
-        relayDatabase.updateChildren(map);
+        repository.relayDatabase.updateChildren(map);
     }
 }

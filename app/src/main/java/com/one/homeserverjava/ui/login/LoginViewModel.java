@@ -75,6 +75,7 @@ public class LoginViewModel extends BaseViewModel implements FirebaseCallbacks {
 
     @Override
     public void loginSuccess(Result<LoggedInUser> user) {
+        getRepository().initialiseFirebase();
         saveUser();
         LoggedInUser data = ((Result.Success<LoggedInUser>) user).getData();
         loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));

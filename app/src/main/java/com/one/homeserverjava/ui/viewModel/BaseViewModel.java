@@ -13,21 +13,9 @@ public class BaseViewModel extends AndroidViewModel {
 
     Repository repository;
 
-    FirebaseAuth firebaseAuth;
-    DatabaseReference relayDatabase;
-    DatabaseReference piInfoDatabase;
-    DatabaseReference errDatabase;
-
     public BaseViewModel(Application application) {
         super(application);
-
         repository=Repository.getInstance(application);
-
-        firebaseAuth=FirebaseAuth.getInstance();
-
-        relayDatabase = FirebaseDatabase.getInstance().getReference("/"+firebaseAuth.getCurrentUser().getUid()+"/admin/relays");
-        piInfoDatabase = FirebaseDatabase.getInstance().getReference("/admin/pi");
-        errDatabase = FirebaseDatabase.getInstance().getReference("/admin/error");
     }
 
     protected Repository getRepository(){return repository;}
