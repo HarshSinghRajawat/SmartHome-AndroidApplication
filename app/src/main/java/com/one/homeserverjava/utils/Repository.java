@@ -36,8 +36,8 @@ public class Repository {
     public void initialiseFirebase(){
         this.firebaseAuth= FirebaseAuth.getInstance();
         this.relayDatabase = FirebaseDatabase.getInstance().getReference("/"+firebaseAuth.getCurrentUser().getUid()+"/admin/relays");
-        this.piInfoDatabase = FirebaseDatabase.getInstance().getReference("/admin/pi");
-        this.errDatabase = FirebaseDatabase.getInstance().getReference("/admin/error");
+        this.piInfoDatabase = FirebaseDatabase.getInstance().getReference("/"+firebaseAuth.getCurrentUser().getUid()+"/admin/pi");
+        this.errDatabase = FirebaseDatabase.getInstance().getReference("/"+firebaseAuth.getCurrentUser().getUid()+"/admin/error");
     }
 
     public static Repository getInstance(Application app){

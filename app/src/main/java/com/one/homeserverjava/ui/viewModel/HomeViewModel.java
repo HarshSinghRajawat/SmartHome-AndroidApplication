@@ -2,15 +2,19 @@ package com.one.homeserverjava.ui.viewModel;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.one.homeserverjava.models.RelayData;
 import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
@@ -171,6 +175,43 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
         relayData.addAll(list);
         Adapter adapter=new Adapter(activity, relayData,this);
         return adapter;
+    }
+    public void rebootPi(Context context){
+        try {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("Reboot",false);
+
+            repository.piInfoDatabase.updateChildren(map);
+
+            Thread.sleep(2000);
+
+            map = new HashMap<>();
+            map.put("Reboot",true);
+
+            repository.piInfoDatabase.updateChildren(map);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void shutdownPi(Context context){
+        try {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("PowerOff",false);
+
+            repository.piInfoDatabase.updateChildren(map);
+
+            Thread.sleep(2000);
+
+            map = new HashMap<>();
+            map.put("PowerOff",true);
+
+            repository.piInfoDatabase.updateChildren(map);
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

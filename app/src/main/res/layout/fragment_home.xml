@@ -23,6 +23,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/Shutdown"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/Icon_height"
+            android:background="@android:color/transparent"
+            app:icon="@drawable/shutdown"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_list_start"
+             />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/Reboot"
+            android:layout_width="50dp"
+            android:layout_height="@dimen/Icon_height"
+            android:background="@android:color/transparent"
+            app:icon="@drawable/reboot"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_end"
+            app:layout_constraintEnd_toStartOf="@id/guideline_list_end"
+             />
+
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_end"
             android:layout_width="wrap_content"

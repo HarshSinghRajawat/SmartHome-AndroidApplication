@@ -28,10 +28,24 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         viewModel.getRealTimeData(getActivity(),views.list);
+
+
+        views.Shutdown.setOnClickListener(this::handleShutdownTrigger);
+
+        views.Reboot.setOnClickListener(this::handleRebootTrigger);
 //        initAPIListener();
 //        getLocalIP();
         return views.getRoot();
     }
+
+    private void handleShutdownTrigger(View view) {
+        viewModel.shutdownPi(getContext());
+    }
+
+    private void handleRebootTrigger(View view) {
+        viewModel.rebootPi(getContext());
+    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
