@@ -10,11 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import com.one.homeserverjava.R;
 import com.one.homeserverjava.models.RelayData;
 import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
-
 
 import java.util.ArrayList;
 
@@ -37,6 +35,7 @@ public class Adapter extends ArrayAdapter<RelayData> {
 
 
         TextView textView= listItem.findViewById(R.id.relayName);
+        Button sch = listItem.findViewById(R.id.schedule);
         Button btn= listItem.findViewById(R.id.relaySwitch);
 
         textView.setText(relayData.getRelay_name());
@@ -56,6 +55,14 @@ public class Adapter extends ArrayAdapter<RelayData> {
                 btn.setText( toggle ? "ON":"OFF");
 
                 callbacks.setRelays(relayData);
+            }
+        });
+
+        sch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                relayData.setStatus(relayData.getStatus().contains("on")?"off":"on");
+                callbacks.schedule(getContext(), relayData);
             }
         });
 

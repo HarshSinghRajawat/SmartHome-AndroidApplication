@@ -1,7 +1,5 @@
 package com.one.homeserverjava.models;
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
 public class RelayData {
@@ -40,7 +38,7 @@ public class RelayData {
 
     @Override
     public String toString() {
-        return "\nRelayData name:- "+relay_name+"\nStatus:- "+status+"\nOutput:- "+output;
+        return "Relay"+relay+"\nRelayData name:- "+relay_name+"\nStatus:- "+status+"\nOutput:- "+output;
     }
 
     public String getStatus() {

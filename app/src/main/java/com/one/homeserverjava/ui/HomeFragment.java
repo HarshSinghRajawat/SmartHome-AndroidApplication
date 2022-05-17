@@ -1,22 +1,27 @@
 package com.one.homeserverjava.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.one.homeserverjava.utils.AsyncResponse;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
 import com.one.homeserverjava.databinding.FragmentHomeBinding;
+import com.one.homeserverjava.models.RelayData;
 import com.one.homeserverjava.models.ServerResponse;
+import com.one.homeserverjava.ui.Callbacks.WorkManagerCallbacks;
 import com.one.homeserverjava.ui.viewModel.HomeViewModel;
+import com.one.homeserverjava.utils.AsyncResponse;
 import com.one.homeserverjava.utils.Utils;
 
+import java.util.UUID;
 
-public class HomeFragment extends Fragment {
+
+public class HomeFragment extends Fragment implements WorkManagerCallbacks {
     FragmentHomeBinding views;
     HomeViewModel viewModel;
     DialogBox notificationDialog;
@@ -28,7 +33,7 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         viewModel.getRealTimeData(getActivity(),views.list);
-
+        viewModel.setWorkManagerCallbacks(this);
 
         views.Shutdown.setOnClickListener(this::handleShutdownTrigger);
 
@@ -125,4 +130,14 @@ public class HomeFragment extends Fragment {
 
     }
 
+    @Override
+    public void setObserver(UUID id, RelayData relayData) {
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(id).observe(this.getViewLifecycleOwner(), workInfo -> {
+            if (workInfo.getState() != null &&
+                    workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                viewModel.setRelays(relayData);
+                viewModel.getRealTimeData(getActivity(),views.list);
+            }
+        });
+    }
 }

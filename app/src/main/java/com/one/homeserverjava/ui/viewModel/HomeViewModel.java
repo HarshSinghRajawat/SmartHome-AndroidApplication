@@ -2,32 +2,42 @@ package com.one.homeserverjava.ui.viewModel;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.one.homeserverjava.models.RelayData;
-import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
-import com.one.homeserverjava.utils.Adapter;
-import com.one.homeserverjava.utils.AsyncResponse;
 import com.one.homeserverjava.models.RelayRequest;
 import com.one.homeserverjava.models.ServerResponse;
 import com.one.homeserverjava.models.SetNameRequest;
+import com.one.homeserverjava.ui.Callbacks.LocalNetworkCallbacks;
+import com.one.homeserverjava.ui.Callbacks.WorkManagerCallbacks;
+import com.one.homeserverjava.utils.Adapter;
+import com.one.homeserverjava.utils.AsyncResponse;
+import com.one.homeserverjava.utils.Scheduler;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import retrofit2.Call;
@@ -43,11 +53,13 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     public final int SET_NAME=4;
 
     public boolean hasLocalIP=false;
+    ArrayList<RelayData> relayData;
 
 
     private MutableLiveData<AsyncResponse<ServerResponse,Exception>> apiLiveData;
+    private WorkManagerCallbacks workManagerCallbacks;
 
-    public HomeViewModel( Application application) {
+    public HomeViewModel(Application application) {
         super(application);
     }
 
@@ -80,6 +92,7 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     public boolean checkLocalPiAddress(){
         return repository.preferences.getLocalBaseUrl()!="";
     }
+
     private void setRelayRequest(RelayRequest relayRequest){
         repository.api.resource
                 .setRelay(relayRequest).enqueue(new Callback<ServerResponse>() {
@@ -97,6 +110,9 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
                 apiLiveData.setValue(AsyncResponse.error(t.fillInStackTrace(),"API Call Fail"));
             }
         });
+    }
+    public void setWorkManagerCallbacks(WorkManagerCallbacks workManagerCallbacks) {
+        this.workManagerCallbacks = workManagerCallbacks;
     }
     private void setRelayNameRequest(SetNameRequest setNameRequest){
         repository.api.resource
@@ -171,7 +187,7 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     }
 
     public Adapter populateList(Activity activity, List<RelayData> list){
-        ArrayList<RelayData> relayData =new ArrayList<>();
+        relayData =new ArrayList<>();
         relayData.addAll(list);
         Adapter adapter=new Adapter(activity, relayData,this);
         return adapter;
@@ -256,10 +272,61 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     @Override
     public void setRelays(RelayData relayData) {
         Map<String, Object> map = new HashMap<>();
-        Log.d("myTest", relayData.getRelay()+"-"+ relayData.getStatus());
 
         map.put("relay"+relayData.getRelay(),relayData);
 
         repository.relayDatabase.updateChildren(map);
     }
+
+    @Override
+    public void schedule(Context context, RelayData relayData){
+        Calendar calendar = Calendar.getInstance();
+        TimePickerDialog timePickerDialog =  new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Calendar calendar = Calendar.getInstance();
+                    int totalMinutes = ((i - calendar.get(Calendar.HOUR_OF_DAY))*60)+(i1-calendar.get(Calendar.MINUTE));
+                    long diff = Duration.ofMinutes(totalMinutes).toMillis() - Duration.ofSeconds(calendar.get(Calendar.SECOND)).toMillis();
+
+                    scheduleWork(diff, relayData);
+                } else{
+                    Toast.makeText(getApplication().getApplicationContext(), "Unable to schedule due to API version" , Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                false);
+        timePickerDialog.show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void scheduleWork(long diff, RelayData relayData){
+        WorkManager manager = WorkManager.getInstance();
+        String reqTag="Relay"+relayData.getRelay();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        manager.cancelAllWorkByTag(reqTag);
+        Data inputData = new Data.Builder()
+                .putInt("relay",relayData.getRelay())
+                .putString("relayName",relayData.getRelay_name())
+                .putString("status",relayData.getStatus())
+                .putString("date",relayData.getDate())
+                .putString("method",relayData.getMethod())
+                .putString("output",relayData.getOutput())
+                .putString("time",relayData.getTime())
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(Scheduler.class)
+                .setConstraints(constraints)
+                .setInputData(inputData)
+                .setInitialDelay(diff, TimeUnit.MILLISECONDS)
+                .addTag(reqTag)
+                .build();
+        manager.enqueue(request);
+
+        workManagerCallbacks.setObserver(request.getId(), relayData);
+
+    }
+
 }
