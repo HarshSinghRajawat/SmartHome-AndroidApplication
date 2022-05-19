@@ -1,10 +1,17 @@
 package com.one.homeserverjava.ui;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.DirectedAcyclicGraph;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.work.WorkInfo;
@@ -25,6 +32,7 @@ public class HomeFragment extends Fragment implements WorkManagerCallbacks {
     FragmentHomeBinding views;
     HomeViewModel viewModel;
     DialogBox notificationDialog;
+    public static final int VOICE_CONTROL_REQ = 236;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,9 +46,17 @@ public class HomeFragment extends Fragment implements WorkManagerCallbacks {
         views.Shutdown.setOnClickListener(this::handleShutdownTrigger);
 
         views.Reboot.setOnClickListener(this::handleRebootTrigger);
+        views.Mic.setOnClickListener(this::handleVoiceControl);
 //        initAPIListener();
 //        getLocalIP();
         return views.getRoot();
+    }
+
+    private void handleVoiceControl(View view) {
+        Intent intent =new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Start Speaking!...");
+        startActivityForResult(intent, VOICE_CONTROL_REQ);
     }
 
     private void handleShutdownTrigger(View view) {
@@ -128,6 +144,16 @@ public class HomeFragment extends Fragment implements WorkManagerCallbacks {
     public void PiNotRunning(){
         Utils.notifyDialogBox(getFragmentManager(),"Connectivity Error","Seems like Pi is not Running on your Network.",Utils.MSG);
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == VOICE_CONTROL_REQ && resultCode == RESULT_OK){
+            Log.d("myTest", "onActivityResult: "+ data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS));
+            //handleInput
+            viewModel.handleVoiceCmd(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
+        }
     }
 
     @Override

@@ -329,4 +329,30 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
 
     }
 
+    public void handleVoiceCmd(String input){
+        String status = input.contains("on")?"on":"off";
+        int relay;
+        if(input.contains("one") || input.contains("1")){
+            relay = 1;
+        }else if(input.contains("two") || input.contains("2")){
+            relay = 2;
+        }else if(input.contains("three") || input.contains("3")){
+            relay = 3;
+        }else if(input.contains("four") || input.contains("4")){
+            relay = 4;
+        }else if(input.contains("five") || input.contains("5")){
+            relay = 5;
+        }else if(input.contains("six") || input.contains("6")){
+            relay = 6;
+        }else if(input.contains("seven") || input.contains("7")){
+            relay = 7;
+        }else if(input.contains("eight") || input.contains("8")){
+            relay = 8;
+        } else {
+            return;
+        }
+
+        Log.d("myTest", "handleVoiceCmd: Relay "+relay+" status "+status);
+    }
+
 }

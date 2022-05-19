@@ -36,6 +36,22 @@
              />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/Mic"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/Icon_height"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="0dp"
+            android:layout_marginLeft="20dp"
+            app:icon="@drawable/ic_baseline_mic_24"
+            app:iconTint="#C8C8C8"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_end"
+            app:layout_constraintStart_toEndOf="@id/Shutdown"
+            />
+
+
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/Reboot"
             android:layout_width="50dp"
             android:layout_height="@dimen/Icon_height"
