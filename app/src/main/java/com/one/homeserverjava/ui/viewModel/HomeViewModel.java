@@ -53,7 +53,7 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     public final int SET_NAME=4;
 
     public boolean hasLocalIP=false;
-    ArrayList<RelayData> relayData;
+    ArrayList<RelayData> list;
 
 
     private MutableLiveData<AsyncResponse<ServerResponse,Exception>> apiLiveData;
@@ -187,7 +187,7 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
     }
 
     public Adapter populateList(Activity activity, List<RelayData> list){
-        relayData =new ArrayList<>();
+        ArrayList<RelayData> relayData =new ArrayList<>();
         relayData.addAll(list);
         Adapter adapter=new Adapter(activity, relayData,this);
         return adapter;
@@ -232,7 +232,7 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
 
 
     public void getRealTimeData(Activity activity, ListView view){
-        ArrayList<RelayData> list = new ArrayList<>();
+        list = new ArrayList<>();
         Adapter adapter=new Adapter(activity,list,this);
         view.setAdapter(adapter);
 
@@ -352,7 +352,12 @@ public class HomeViewModel extends BaseViewModel implements LocalNetworkCallback
             return;
         }
 
-        Log.d("myTest", "handleVoiceCmd: Relay "+relay+" status "+status);
+        if(list!=null){
+            RelayData data = list.get(relay-1);
+            data.setStatus(status);
+            setRelays(data);
+        }
+
     }
 
 }

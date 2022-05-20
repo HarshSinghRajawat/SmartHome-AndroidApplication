@@ -150,9 +150,9 @@ public class HomeFragment extends Fragment implements WorkManagerCallbacks {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == VOICE_CONTROL_REQ && resultCode == RESULT_OK){
-            Log.d("myTest", "onActivityResult: "+ data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS));
             //handleInput
             viewModel.handleVoiceCmd(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
+            viewModel.getRealTimeData(getActivity(),views.list);
         }
     }
 
